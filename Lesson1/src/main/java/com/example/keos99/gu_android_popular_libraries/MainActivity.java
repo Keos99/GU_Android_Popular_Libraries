@@ -5,14 +5,14 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 
-import com.example.keos99.gu_android_popular_libraries.MVP.Model;
+import com.example.keos99.gu_android_popular_libraries.MVP.presenter.Presenter;
+import com.example.keos99.gu_android_popular_libraries.MVP.view.MainView;
 
 import java.util.Observable;
-import java.util.Observer;
 
-public class MainActivity extends AppCompatActivity implements Observer, View.OnClickListener {
+public class MainActivity extends AppCompatActivity implements MainView, View.OnClickListener {
 
-    private Model model;
+    private Presenter presenter;
     private Button button1;
     private Button button2;
     private Button button3;
@@ -30,29 +30,26 @@ public class MainActivity extends AppCompatActivity implements Observer, View.On
         button2.setOnClickListener(this);
         button3.setOnClickListener(this);
 
-        model = new Model();
-        model.addObserver(this);
+        presenter = new Presenter(this);
     }
 
     @Override
     public void onClick(View v) {
-        switch (v.getId()){
-            case R.id.button_counter1:
-                model.setValueAtIndex(0);
-                break;
-            case R.id.button_counter2:
-                model.setValueAtIndex(1);
-                break;
-            case R.id.button_counter3:
-                model.setValueAtIndex(2);
-                break;
-        }
+        presenter.buttonClick(v.getId());
     }
 
     @Override
-    public void update(Observable o, Object arg) {
-        button1.setText("Количество = " + model.getValueAtIndex(0));
-        button2.setText("Количество = " + model.getValueAtIndex(1));
-        button3.setText("Количество = " + model.getValueAtIndex(2));
+    public void setButtonText(int btnIndex, int value) {
+        switch (btnIndex){
+            case 1:
+                button1.setText("Количество = " + value);
+                break;
+            case 2:
+                button2.setText("Количество = " + value);
+                break;
+            case 3:
+                button3.setText("Количество = " + value);
+                break;
+        }
     }
 }
