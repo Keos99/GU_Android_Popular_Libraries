@@ -1,0 +1,8 @@
+<resources>
+    <string name="app_name">GU_Android_Popular_Libraries</string>
+    <string name="quantity">Количество = 0</string>
+    <string name="counter_2">Счетчик 2</string>
+    <string name="counter_1">Счетчик 1</string>
+    <string name="counter_3">Счетчик 3</string>
+
+</resources>
