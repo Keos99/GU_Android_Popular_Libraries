@@ -7,10 +7,11 @@ import com.arellomobile.mvp.MvpAppCompatActivity;
 import com.arellomobile.mvp.presenter.InjectPresenter;
 import com.arellomobile.mvp.presenter.ProvidePresenter;
 import ru.geekbrains.android3_1.R;
+import ru.geekbrains.android3_1.mvp.presenter.ButtonCounterIds;
 import ru.geekbrains.android3_1.mvp.presenter.MainPresenter;
 import ru.geekbrains.android3_1.mvp.view.MainView;
 
-public class MainActivity extends MvpAppCompatActivity implements View.OnClickListener, MainView {
+public class MainActivity extends MvpAppCompatActivity implements View.OnClickListener, MainView, ButtonCounterIds {
 
     Button buttonOne;
     Button buttonTwo;
@@ -34,7 +35,7 @@ public class MainActivity extends MvpAppCompatActivity implements View.OnClickLi
 
     @ProvidePresenter
     public MainPresenter provideMainPresenter(){
-        return new MainPresenter();
+        return new MainPresenter(this);
     }
 
     public void onClick(View v) {
@@ -59,5 +60,20 @@ public class MainActivity extends MvpAppCompatActivity implements View.OnClickLi
     @Override
     public void setButtonOneValue(int value) {
 
+    }
+
+    @Override
+    public int getBtnCounter1Id() {
+        return R.id.btnCounter1;
+    }
+
+    @Override
+    public int getBtnCounter2Id() {
+        return R.id.btnCounter2;
+    }
+
+    @Override
+    public int getBtnCounter3Id() {
+        return R.id.btnCounter3;
     }
 }
