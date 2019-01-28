@@ -27,5 +27,5 @@ dependencies {
     androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.2'
     implementation 'com.arello-mobile:moxy:1.5.5'
     annotationProcessor 'com.arello-mobile:moxy-app-compat:1.5.5'
-    implementation 'com.arello-mobile:moxy-compiler:1.5.5'
+    annotationProcessor 'com.arello-mobile:moxy-compiler:1.5.5'
 }
