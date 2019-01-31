@@ -6,18 +6,45 @@ import com.arellomobile.mvp.MvpPresenter;
 import io.reactivex.Scheduler;
 import io.reactivex.Single;
 import io.reactivex.schedulers.Schedulers;
+import io.reactivex.subjects.PublishSubject;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import ru.geekbrains.android3_4.mvp.model.api.ApiHolder;
+import ru.geekbrains.android3_4.mvp.model.entity.Repository;
+import ru.geekbrains.android3_4.mvp.model.entity.User;
 import ru.geekbrains.android3_4.mvp.model.repo.UsersRepo;
+import ru.geekbrains.android3_4.mvp.presenter.list.IRepoListPresenter;
 import ru.geekbrains.android3_4.mvp.view.MainView;
+import ru.geekbrains.android3_4.mvp.view.item.RepoItemView;
 import timber.log.Timber;
 
 @InjectViewState
 public class MainPresenter extends MvpPresenter<MainView> {
 
-    Scheduler mainThreadScheduler;
-    UsersRepo usersRepo;
+    private Scheduler mainThreadScheduler;
+    private UsersRepo usersRepo;
+    private User user;
+    public RepoListPresenter repoListPresenter = new RepoListPresenter();
+
+    public class RepoListPresenter implements IRepoListPresenter {
+        PublishSubject<RepoItemView> clickSubject = PublishSubject.create();
+
+        @Override
+        public PublishSubject<RepoItemView> getClickSubject() {
+            return clickSubject;
+        }
+
+        @Override
+        public void bindView(RepoItemView view) {
+            Repository repository = user.getRepos().get(view.getPos());
+            view.setTitle(repository.getName());
+        }
+
+        @Override
+        public int getRepoCount() {
+            return user == null || user.getRepos() == null ? 0 : user.getRepos().size();
+        }
+    }
 
     public MainPresenter(Scheduler mainThreadScheduler) {
         this.mainThreadScheduler = mainThreadScheduler;
@@ -28,34 +55,35 @@ public class MainPresenter extends MvpPresenter<MainView> {
     @Override
     protected void onFirstViewAttach() {
         super.onFirstViewAttach();
-        loadUser();
+        getViewState().init();
+        loadInfo();
     }
 
     @SuppressLint("CheckResult")
-    private void loadUser() {
+    public void loadInfo() {
+        getViewState().showLoading();
         usersRepo.getUser("googlesamples")
                 .observeOn(mainThreadScheduler)
                 .subscribe(user -> {
-                            getViewState().setUsernametext(user.getLogin());
-                            getViewState().setImageUrl(user.getAvatarUrl());
-                        },
-                        throwable -> {
-                            Timber.e(throwable);
-                        });
+                    this.user = user;
+                    getViewState().showAvatar(user.getAvatarUrl());
+                    getViewState().setUsername(user.getLogin());
+                    usersRepo.getUsersRepos(user.getReposUrl())
+                            .observeOn(mainThreadScheduler)
+                            .subscribe(repositories -> {
+                                this.user.setRepos(repositories);
+                                getViewState().hideLoading();
+                                getViewState().updateRepoList();
+                            }, throwable -> {
+                                Timber.e(throwable, "Failed to get user repos");
+                                getViewState().showError(throwable.getMessage());
+                            });
+
+
+                }, throwable -> {
+                    Timber.e(throwable, "Failed to get user");
+                    getViewState().showError(throwable.getMessage());
+                });
     }
 
-
-    @SuppressLint("CheckResult")
-    private void loadDataWithOkHttp() {
-        Single<String> single = Single.fromCallable(() -> {
-            OkHttpClient client = new OkHttpClient();
-            Request request = new Request.Builder()
-                    .url("https://api.github.com/users/googlesamples")
-                    .build();
-            return client.newCall(request).execute().body().string();
-        });
-
-        single.subscribeOn(Schedulers.io())
-                .subscribe(string -> Timber.d(string));
-    }
 }

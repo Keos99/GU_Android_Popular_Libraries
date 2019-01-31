@@ -3,15 +3,32 @@ package ru.geekbrains.android3_4.mvp.model.entity;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class User {
+    String login;
+    String avatarUrl;
+    String reposUrl;
 
-    @Expose
-    private String login;
+    public User() {
+    }
 
-    @Expose
-    private String avatarUrl;
+    public User(String login, String avatarUrl, String reposUrl) {
+        this.avatarUrl = avatarUrl;
+        this.login = login;
+        this.reposUrl = reposUrl;
+    }
 
-    @Expose @SerializedName("created_at") private String creationDate;
+    List<Repository> repos = new ArrayList<>();
+
+    public String getAvatarUrl() {
+        return avatarUrl;
+    }
+
+    public void setAvatarUrl(String avatarUrl) {
+        this.avatarUrl = avatarUrl;
+    }
 
     public String getLogin() {
         return login;
@@ -21,11 +38,19 @@ public class User {
         this.login = login;
     }
 
-    public String getAvatarUrl() {
-        return avatarUrl;
+    public String getReposUrl() {
+        return reposUrl;
     }
 
-    public void setAvatarUrl(String avatarUrl) {
-        this.avatarUrl = avatarUrl;
+    public void setReposUrl(String reposUrl) {
+        this.reposUrl = reposUrl;
+    }
+
+    public List<Repository> getRepos() {
+        return repos;
+    }
+
+    public void setRepos(List<Repository> repos) {
+        this.repos = repos;
     }
 }

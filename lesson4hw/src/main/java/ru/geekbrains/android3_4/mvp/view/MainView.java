@@ -9,4 +9,11 @@ public interface MainView extends MvpView {
     void showMessage(String text);
     void setImageUrl(String url);
     void setUsernametext(String text);
+    void showLoading();
+    void init();
+    void showAvatar(String avatarUrl);
+    void setUsername(String username);
+    void hideLoading();
+    void updateRepoList();
+    void showError(String message);
 }
