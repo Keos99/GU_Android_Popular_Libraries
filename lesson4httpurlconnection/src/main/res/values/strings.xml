@@ -1,0 +1,5 @@
+<resources>
+    <string name="app_name">Lesson4HttpURLConnection</string>
+    <string name="load_page">Загрузить страницу</string>
+    <string name="some_text">Some text</string>
+</resources>
