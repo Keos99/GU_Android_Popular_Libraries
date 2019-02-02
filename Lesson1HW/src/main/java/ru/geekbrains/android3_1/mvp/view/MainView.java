@@ -7,7 +7,8 @@ import com.arellomobile.mvp.viewstate.strategy.StateStrategyType;
 @StateStrategyType(value = AddToEndSingleStrategy.class)
 public interface MainView extends MvpView {
 
-    void setButtonValue(int index, int value);
     void setButtonOneValue(int value);
+    void setButtonTwoValue(int value);
+    void setButtonThreeValue(int value);
 
 }

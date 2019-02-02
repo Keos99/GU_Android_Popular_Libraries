@@ -1,23 +1,23 @@
 package ru.geekbrains.android3_1.ui;
 
 import android.os.Bundle;
-import android.view.View;
+
 import android.widget.Button;
 import com.arellomobile.mvp.MvpAppCompatActivity;
 import com.arellomobile.mvp.presenter.InjectPresenter;
-import com.arellomobile.mvp.presenter.ProvidePresenter;
 import ru.geekbrains.android3_1.R;
-import ru.geekbrains.android3_1.mvp.presenter.ButtonCounterIds;
 import ru.geekbrains.android3_1.mvp.presenter.MainPresenter;
 import ru.geekbrains.android3_1.mvp.view.MainView;
 
-public class MainActivity extends MvpAppCompatActivity implements View.OnClickListener, MainView, ButtonCounterIds {
+public class MainActivity extends MvpAppCompatActivity implements MainView {
 
     Button buttonOne;
     Button buttonTwo;
     Button buttonThree;
+    String count;
 
-    @InjectPresenter MainPresenter presenter;
+    @InjectPresenter
+    MainPresenter presenter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -28,52 +28,23 @@ public class MainActivity extends MvpAppCompatActivity implements View.OnClickLi
         buttonTwo = findViewById(R.id.btnCounter2);
         buttonThree = findViewById(R.id.btnCounter3);
 
-        buttonOne.setOnClickListener(this);
-        buttonTwo.setOnClickListener(this);
-        buttonThree.setOnClickListener(this);
-    }
-
-    @ProvidePresenter
-    public MainPresenter provideMainPresenter(){
-        return new MainPresenter(this);
-    }
-
-    public void onClick(View v) {
-        presenter.counterClick(v.getId());
-    }
-
-    @Override
-    public void setButtonValue(int index, int value) {
-        switch (index) {
-            case 0:
-                buttonOne.setText(String.format(getString(R.string.countEquals), value));
-                break;
-            case 1:
-                buttonTwo.setText(String.format(getString(R.string.countEquals), value));
-                break;
-            case 2:
-                buttonThree.setText(String.format(getString(R.string.countEquals), value));
-                break;
-        }
+        buttonOne.setOnClickListener(view -> presenter.buttonOneClick());
+        buttonTwo.setOnClickListener(view -> presenter.buttonTwoClick());
+        buttonThree.setOnClickListener(view -> presenter.buttonThreeClick());
     }
 
     @Override
     public void setButtonOneValue(int value) {
-
+        buttonOne.setText(getString(R.string.count) + " " + value);
     }
 
     @Override
-    public int getBtnCounter1Id() {
-        return R.id.btnCounter1;
+    public void setButtonTwoValue(int value) {
+        buttonTwo.setText(getString(R.string.count) + " " + value);
     }
 
     @Override
-    public int getBtnCounter2Id() {
-        return R.id.btnCounter2;
-    }
-
-    @Override
-    public int getBtnCounter3Id() {
-        return R.id.btnCounter3;
+    public void setButtonThreeValue(int value) {
+        buttonThree.setText(getString(R.string.count) + " " + value);
     }
 }

@@ -2,7 +2,6 @@ package ru.geekbrains.android3_1.mvp.presenter;
 
 import com.arellomobile.mvp.InjectViewState;
 import com.arellomobile.mvp.MvpPresenter;
-import ru.geekbrains.android3_1.R;
 import ru.geekbrains.android3_1.mvp.model.Model;
 import ru.geekbrains.android3_1.mvp.view.MainView;
 
@@ -10,13 +9,9 @@ import ru.geekbrains.android3_1.mvp.view.MainView;
 public class MainPresenter extends MvpPresenter<MainView> {
 
     private Model model;
-    private ButtonCounterIds buttonCounterIds;
 
-
-
-    public MainPresenter(ButtonCounterIds buttonCounterIds) {
+    public MainPresenter() {
         this.model = new Model();
-        this.buttonCounterIds = buttonCounterIds;
     }
 
     public int calculateButtonValue(int index){
@@ -24,13 +19,15 @@ public class MainPresenter extends MvpPresenter<MainView> {
         return model.getAt(index);
     }
 
-    public void counterClick(int id){
-        if (id == buttonCounterIds.getBtnCounter1Id()){
-            getViewState().setButtonValue(0, calculateButtonValue(0));
-        } else if (id == buttonCounterIds.getBtnCounter2Id()) {
-            getViewState().setButtonValue(1, calculateButtonValue(1));
-        } else if (id == buttonCounterIds.getBtnCounter3Id()){
-            getViewState().setButtonValue(2, calculateButtonValue(2));
-        }
+    public void buttonOneClick() {
+        getViewState().setButtonOneValue(calculateButtonValue(0));
+    }
+
+    public void buttonTwoClick() {
+        getViewState().setButtonTwoValue(calculateButtonValue(1));
+    }
+
+    public void buttonThreeClick() {
+        getViewState().setButtonThreeValue(calculateButtonValue(2));
     }
 }
