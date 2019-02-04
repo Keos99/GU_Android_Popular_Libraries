@@ -40,10 +40,8 @@ public class MainPresenter extends MvpPresenter<MainView> {
     }
 
     public RepoListPresenter repoListPresenter = new RepoListPresenter();
-
     private Scheduler mainThreadScheduler;
     private RealmUserRepo userRepo;
-
     private User user;
 
     public MainPresenter(Scheduler mainThreadScheduler) {

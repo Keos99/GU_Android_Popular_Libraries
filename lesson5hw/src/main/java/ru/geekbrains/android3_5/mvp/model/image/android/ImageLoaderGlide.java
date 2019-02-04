@@ -9,6 +9,7 @@ import com.bumptech.glide.request.RequestListener;
 import com.bumptech.glide.request.target.Target;
 import io.paperdb.Paper;
 import ru.geekbrains.android3_5.mvp.common.Utils;
+import ru.geekbrains.android3_5.mvp.model.cache.ImageCache;
 import ru.geekbrains.android3_5.mvp.model.image.ImageLoader;
 import ru.geekbrains.android3_5.ui.NetworkStatus;
 
@@ -26,18 +27,14 @@ public class ImageLoaderGlide implements ImageLoader<ImageView> {
 
                 @Override
                 public boolean onResourceReady(Bitmap resource, Object model, Target<Bitmap> target, DataSource dataSource, boolean isFirstResource) {
-                    ByteArrayOutputStream stream = new ByteArrayOutputStream();
-                    resource.compress(Bitmap.CompressFormat.PNG, 100, stream);
-                    Paper.book("images").write(Utils.SHA1(url), stream.toByteArray());
+                    ImageCache.saveImage(url, resource);
                     return false;
                 }
             }).into(container);
         } else {
-            String sha1 = Utils.SHA1(url);
-            if(Paper.book("images").contains(sha1)){
-                byte[] bytes = Paper.book("images").read(sha1);
+            if (ImageCache.contains(url)) {
                 GlideApp.with(container.getContext())
-                        .load(bytes)
+                        .load(ImageCache.getFile(url))
                         .into(container);
             }
         }
