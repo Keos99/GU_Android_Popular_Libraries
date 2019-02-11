@@ -14,9 +14,9 @@ import ru.geekbrains.android3_6.mvp.model.entity.realm.CachedImage;
 import timber.log.Timber;
 
 public class ImageCache {
-    private static final String IMAGE_FOLDER_NAME = "image";
+    private final String IMAGE_FOLDER_NAME = "image";
 
-    public static File getFile(String url) {
+    public File getFile(String url) {
         CachedImage cachedImage = Realm.getDefaultInstance().where(CachedImage.class).equalTo("url", url).findFirst();
         if (cachedImage != null) {
             return new File(cachedImage.getPath());
@@ -24,16 +24,16 @@ public class ImageCache {
         return null;
     }
 
-    public static boolean contains(String url) {
+    public boolean contains(String url) {
         return Realm.getDefaultInstance().where(CachedImage.class).equalTo("url", url).count() > 0;
     }
 
-    public static void clear() {
+    public void clear() {
         Realm.getDefaultInstance().executeTransaction(realm -> realm.delete(CachedImage.class));
         deleteFileOrDirRecursive(getImageDir());
     }
 
-    public static File saveImage(final String url, Bitmap bitmap) {
+    public File saveImage(final String url, Bitmap bitmap) {
         if (!getImageDir().exists() && !getImageDir().mkdirs()) {
             throw new RuntimeException("Failed to create directory: " + getImageDir().toString());
         }
@@ -61,11 +61,11 @@ public class ImageCache {
         return imageFile;
     }
 
-    public static File getImageDir() {
+    public File getImageDir() {
         return new File(App.getInstance().getExternalFilesDir(null) + "/" + IMAGE_FOLDER_NAME);
     }
 
-    public static String SHA1(String s) {
+    public String SHA1(String s) {
         MessageDigest m = null;
 
         try {
@@ -79,11 +79,11 @@ public class ImageCache {
         return hash;
     }
 
-    public static float getSizeKb() {
+    public float getSizeKb() {
         return getFileOrDirSize(getImageDir()) / 1024f;
     }
 
-    public static void deleteFileOrDirRecursive(File fileOrDirectory) {
+    public void deleteFileOrDirRecursive(File fileOrDirectory) {
         if (fileOrDirectory.isDirectory()) {
             for (File child : fileOrDirectory.listFiles()) {
                 deleteFileOrDirRecursive(child);
@@ -92,7 +92,7 @@ public class ImageCache {
         fileOrDirectory.delete();
     }
 
-    public static long getFileOrDirSize(File f) {
+    public long getFileOrDirSize(File f) {
         long size = 0;
         if (f.isDirectory()) {
             for (File file : f.listFiles()) {

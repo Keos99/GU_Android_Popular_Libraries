@@ -20,6 +20,12 @@ import timber.log.Timber;
 
 public class ImageLoaderGlide implements ImageLoader<ImageView> {
 
+    private ImageCache imageCache;
+
+    public ImageLoaderGlide(ImageCache imageCache){
+        this.imageCache = imageCache;
+    }
+
     @Override
     public void loadInto(@Nullable String url, ImageView container) {
         if (NetworkStatus.isOnline()) {
@@ -32,14 +38,14 @@ public class ImageLoaderGlide implements ImageLoader<ImageView> {
 
                 @Override
                 public boolean onResourceReady(Bitmap resource, Object model, Target<Bitmap> target, DataSource dataSource, boolean isFirstResource) {
-                    ImageCache.saveImage(url, resource);
+                    imageCache.saveImage(url, resource);
                     return false;
                 }
             }).into(container);
         } else {
-            if (ImageCache.contains(url)) {
+            if (imageCache.contains(url)) {
                 GlideApp.with(container.getContext())
-                        .load(ImageCache.getFile(url))
+                        .load(imageCache.getFile(url))
                         .into(container);
             }
         }

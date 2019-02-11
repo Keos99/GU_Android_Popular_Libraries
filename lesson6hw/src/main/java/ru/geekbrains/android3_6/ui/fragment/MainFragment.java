@@ -17,6 +17,9 @@ import butterknife.ButterKnife;
 import com.arellomobile.mvp.MvpAppCompatFragment;
 import com.arellomobile.mvp.presenter.InjectPresenter;
 import com.arellomobile.mvp.presenter.ProvidePresenter;
+
+import javax.inject.Inject;
+
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import ru.geekbrains.android3_6.App;
 import ru.geekbrains.android3_6.R;
@@ -51,7 +54,7 @@ public class MainFragment extends MvpAppCompatFragment implements MainView {
     MainPresenter presenter;
 
     RepoRVAdapter adapter;
-    ImageLoader<ImageView> imageLoader;
+    @Inject ImageLoader<ImageView> imageLoader;
 
     @Nullable
     @Override
