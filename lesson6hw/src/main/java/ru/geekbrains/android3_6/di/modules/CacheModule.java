@@ -11,6 +11,7 @@ import ru.geekbrains.android3_6.mvp.model.cache.RoomCache;
 @Module
 public class CacheModule {
 
+    @Named("room")
     @Provides
     public ICache cache(){
         return new RoomCache();
