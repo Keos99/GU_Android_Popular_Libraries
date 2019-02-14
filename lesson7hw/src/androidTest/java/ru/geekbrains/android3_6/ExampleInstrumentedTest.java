@@ -1,4 +1,4 @@
-package com.example.lesson7hw;
+package ru.geekbrains.android3_6;
 
 import android.content.Context;
 import android.support.test.InstrumentationRegistry;
@@ -15,12 +15,14 @@ import static org.junit.Assert.*;
  * @see <a href="http://d.android.com/tools/testing">Testing documentation</a>
  */
 @RunWith(AndroidJUnit4.class)
-public class ExampleInstrumentedTest {
+public class ExampleInstrumentedTest
+{
     @Test
-    public void useAppContext() {
+    public void useAppContext() throws Exception
+    {
         // Context of the app under test.
         Context appContext = InstrumentationRegistry.getTargetContext();
 
-        assertEquals("com.example.lesson7hw", appContext.getPackageName());
+        assertEquals("ru.geekbrains.android3_6", appContext.getPackageName());
     }
 }
