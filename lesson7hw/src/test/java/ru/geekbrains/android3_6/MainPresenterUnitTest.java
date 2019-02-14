@@ -79,10 +79,25 @@ public class MainPresenterUnitTest {
         Mockito.verify(mainView).updateRepoList();
     }
 
-
     @Test
     public void loadInfoFailure(){
+        User user = new User("googlesamples", "avatar_url", "repos_url");
+        TestComponent component = DaggerTestComponent.builder()
+                .testRepoModule(new TestRepoModule(){
+                    @Override
+                    public UsersRepo usersRepo() {
+                        UsersRepo repo = super.usersRepo();
+                        Mockito.when(repo.getUser(user.getLogin())).thenReturn(Single.error(new RuntimeException("some error")));
+                        return repo;
+                    }
+                }).build();
 
+        component.inject(presenter);
+        presenter.attachView(mainView);
+        Mockito.verify(presenter).loadInfo("googlesamples");
+        testScheduler.advanceTimeBy(1, TimeUnit.SECONDS);
+
+        Mockito.verify(mainView).hideLoading();
+        Mockito.verify(mainView).showError("some error");
     }
-
 }
